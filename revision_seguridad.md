@@ -1,4 +1,4 @@
-﻿# Informe de revisión de código y seguridad
+# Informe de revisión de código y seguridad
 
 Proyecto: Uber App (app de transporte tipo Uber, Ionic y Angular)
 Estudiante: Diego Alejandro Pino Mapallo
@@ -8,7 +8,7 @@ Commit revisado: 3800745 (Bitácora de uso de IA, el último de la semana 5, ant
 ## 1. Herramientas y criterios
 
 - **Linter:** ESLint con `ng lint` (`@ionic/eslint-config` y `angular-eslint`), más `eslint-plugin-security` con su configuración `recommended`, y Prettier en modo `--check`. Configuración en `eslint.config.js`. Se ejecuta con `npm run lint`.
-- **Auditoría de dependencias:** `npm audit`. Resultado: 12 vulnerabilidades (1 baja, 10 moderadas, 1 alta). Con `npm audit fix` bajaron a 9 (1 baja, 7 moderadas, 1 alta); las 9 restantes solo se corrigen con `--force` (ver sección 4).
+- **Auditoría de dependencias:** `npm audit`. Resultado: 12 vulnerabilidades (1 baja, 10 moderadas, 1 alta). Con `npm audit fix` bajaron a 9 (1 baja, 7 moderadas, 1 alta); en una instalación limpia del 14/11/2026 el conteo final fue 10 (1 baja, 8 moderadas, 1 alta), todas en dependencias de desarrollo (`npm audit --omit=dev`: 0), y solo se corrigen con `--force` (ver sección 4).
 - **Lista de revisión:** la de la semana 6 (corrección y pruebas, diseño y legibilidad, seguridad).
 - **Revisión con IA:** Claude (chat) con el prompt de revisión de la semana (ver sección 3 y la entrada 7 de la bitácora).
 
@@ -20,7 +20,7 @@ Commit revisado: 3800745 (Bitácora de uso de IA, el último de la semana 5, ant
 | Secretos (código, historial, .gitignore, .env.example) | Sí | Sin claves en el código ni en el historial (revisado con `findstr` y `git log -p`). `.env` no estaba en `.gitignore`: ver H-03. Se creó `.env.example`. |
 | Contraseñas (scrypt, bcrypt o argon2 con sal) | No: el proyecto todavía no guarda contraseñas. | Sin hallazgos |
 | Control de acceso (rol verificado y prueba de abuso) | No en esta función pura: no hay roles ni operaciones restringidas. El saldo debe validarse también en el servidor (ver sección 4). | Se agregaron pruebas de entradas inesperadas (H-05, H-06, H-07) |
-| Dependencias (existen, necesarias, versión fijada, npm audit) | Sí | `package-lock.json` fija las versiones. `npm audit fix` corrigió 3 vulnerabilidades (H-04); quedan 9 pendientes (sección 4). |
+| Dependencias (existen, necesarias, versión fijada, npm audit) | Sí | `package-lock.json` fija las versiones. `npm audit fix` corrigió 3 vulnerabilidades (H-04); quedan 10 pendientes (sección 4). |
 
 ## 2. Tabla de hallazgos
 
@@ -66,7 +66,7 @@ Commit revisado: 3800745 (Bitácora de uso de IA, el último de la semana 5, ant
 
 | Pendiente | Por qué no se corrigió todavía | Plan |
 |---|---|---|
-| 9 vulnerabilidades de dependencias (`minimatch` en `typescript-eslint`, y `vite` en `@angular/build`) | Son dependencias de herramientas de desarrollo (linter y servidor de pruebas) y corregirlas exige `npm audit fix --force`, que instala versiones incompatibles con el proyecto | Actualizar Angular y el linter en el próximo incremento y repetir `npm audit` |
+| 10 vulnerabilidades de dependencias (`minimatch` en `typescript-eslint`, y `vite` en `@angular/build`) | Son dependencias de herramientas de desarrollo (linter y servidor de pruebas) y corregirlas exige `npm audit fix --force`, que instala versiones incompatibles con el proyecto | Actualizar Angular y el linter en el próximo incremento y repetir `npm audit` |
 | El saldo y el método de pago deben validarse también en el servidor | Esta función valida en el cliente y solo da el aviso; la API todavía no existe | Implementar la validación en `POST /viajes` (ADR-001) con una prueba de abuso |
 | Orden de validación: monto antes que método de pago | Es una decisión de diseño que depende del cliente | Confirmarla con el cliente |
 | Probar las pruebas en otro entorno | Solo se ejecutaron en mi equipo | Ejecutarlas en integración continua |
