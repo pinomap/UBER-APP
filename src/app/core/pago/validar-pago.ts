@@ -23,11 +23,7 @@ function validarMontos(saldo: number, estimado: number): void {
   }
 }
 
-export function validarPagoViaje(
-  saldo: number,
-  estimado: number,
-  metodoPago: MetodoPago | null
-): ResultadoPago {
+export function validarPagoViaje(saldo: number, estimado: number, metodoPago: MetodoPago | null): ResultadoPago {
   validarMontos(saldo, estimado);
 
   if (metodoPago === null) {

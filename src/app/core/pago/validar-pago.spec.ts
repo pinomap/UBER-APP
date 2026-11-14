@@ -62,14 +62,10 @@ describe('validarPagoViaje (HU-08)', () => {
   });
 
   it('rechaza un estimado igual o menor que 0', () => {
-    expect(() => validarPagoViaje(20000, 0, 'SALDO')).toThrowError(
-      'El estimado debe ser mayor que 0'
-    );
+    expect(() => validarPagoViaje(20000, 0, 'SALDO')).toThrowError('El estimado debe ser mayor que 0');
   });
 
   it('rechaza un saldo negativo', () => {
-    expect(() => validarPagoViaje(-1, 14800, 'SALDO')).toThrowError(
-      'El saldo no puede ser negativo'
-    );
+    expect(() => validarPagoViaje(-1, 14800, 'SALDO')).toThrowError('El saldo no puede ser negativo');
   });
 });
