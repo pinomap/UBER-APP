@@ -1,8 +1,13 @@
-﻿export type MetodoPago = 'SALDO' | 'EFECTIVO';
+﻿/** Métodos de pago que acepta la app. */
+export type MetodoPago = 'SALDO' | 'EFECTIVO';
 
+/** Resultado de validar el pago de un viaje. */
 export interface ResultadoPago {
+  /** `true` si el pasajero puede confirmar el viaje. */
   puedeConfirmar: boolean;
+  /** Aviso para el pasajero; cadena vacía si no hay nada que avisar. */
   mensaje: string;
+  /** Pesos que faltan en el saldo; 0 si no falta nada. */
   faltante: number;
 }
 
@@ -28,20 +33,34 @@ function validarMontos(saldo: number, estimado: number): void {
   }
 }
 
+function permitirConfirmar(): ResultadoPago {
+  return { puedeConfirmar: true, mensaje: '', faltante: 0 };
+}
+
+function bloquearConfirmacion(mensaje: string, faltante = 0): ResultadoPago {
+  return { puedeConfirmar: false, mensaje, faltante };
+}
+
+/**
+ * HU-08. Decide si el pasajero puede confirmar el viaje con el método de pago elegido.
+ *
+ * @param saldo Saldo del pasajero en pesos colombianos (entero, mayor o igual a 0).
+ * @param estimado Precio estimado del viaje en pesos (entero, mayor que 0).
+ * @param metodoPago `'SALDO'`, `'EFECTIVO'` o `null` si el pasajero no ha elegido.
+ * @returns Un `ResultadoPago`: si el método falta o no es válido, pide elegir uno; con efectivo o saldo
+ *          suficiente permite confirmar; si el saldo no alcanza, avisa cuánto falta.
+ * @throws Error si el estimado no es mayor que 0, si el saldo es negativo o si algún monto no es entero.
+ */
 export function validarPagoViaje(saldo: number, estimado: number, metodoPago: MetodoPago | null): ResultadoPago {
   validarMontos(saldo, estimado);
 
   if (!METODOS_VALIDOS.includes(metodoPago as MetodoPago)) {
-    return { puedeConfirmar: false, mensaje: MENSAJE_SIN_METODO, faltante: 0 };
+    return bloquearConfirmacion(MENSAJE_SIN_METODO);
   }
   if (metodoPago === 'EFECTIVO' || saldo >= estimado) {
-    return { puedeConfirmar: true, mensaje: '', faltante: 0 };
+    return permitirConfirmar();
   }
 
   const faltante = estimado - saldo;
-  return {
-    puedeConfirmar: false,
-    mensaje: `Saldo insuficiente, te faltan ${formatearPesos(faltante)}`,
-    faltante,
-  };
+  return bloquearConfirmacion(`Saldo insuficiente, te faltan ${formatearPesos(faltante)}`, faltante);
 }
