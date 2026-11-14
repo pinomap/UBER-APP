@@ -1,6 +1,7 @@
 ﻿import { describe, it, expect } from 'vitest';
 
-import { MetodoPago, validarPagoViaje } from './validar-pago';
+import type { MetodoPago } from './validar-pago';
+import { validarPagoViaje } from './validar-pago';
 
 describe('validarPagoViaje: entradas inesperadas (revisión de seguridad)', () => {
   it('pide elegir un método de pago cuando el método es undefined', () => {
