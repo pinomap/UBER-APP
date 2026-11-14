@@ -1,6 +1,8 @@
+
 // @ts-check
 const ionic = require('@ionic/eslint-config/recommended');
 const angular = require('angular-eslint');
+const security = require('eslint-plugin-security');
 const { defineConfig } = require('eslint/config');
 
 module.exports = defineConfig([
@@ -8,6 +10,7 @@ module.exports = defineConfig([
     ignores: ['www/**', 'dist/**', 'coverage/**', '.angular/**', 'android/**', 'ios/**'],
   },
   ionic,
+  security.configs.recommended,
   {
     files: ['**/*.ts'],
     extends: [angular.configs.tsRecommended],
