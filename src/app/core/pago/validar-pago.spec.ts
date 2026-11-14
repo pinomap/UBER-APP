@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { validarPagoViaje } from './validar-pago';
 
 describe('validarPagoViaje (HU-08)', () => {
