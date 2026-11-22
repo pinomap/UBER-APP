@@ -2,21 +2,25 @@ import { describe, expect, it } from 'vitest';
 
 import { validarCalificacion } from '../app/core/calificacion/validar-calificacion';
 
+import { COMENTARIOS } from './datos-prueba';
+
 const MENSAJE_ESTRELLAS = 'Elige entre 1 y 5 estrellas';
 
 describe('validarCalificacion (HU-09)', () => {
   it.each([
     // Partición válida: 4 estrellas con comentario (escenario 1 de HU-09)
-    [4, 'Buen servicio'],
+    [4, COMENTARIOS.normal],
     // Límite: primer valor válido
-    [1, 'Regular'],
+    [1, COMENTARIOS.normal],
     // Límite: último valor válido
-    [5, 'Excelente'],
+    [5, COMENTARIOS.normal],
     // Partición: comentario vacío, el comentario es opcional
-    [5, ''],
-    // Dato difícil: tildes, ñ y apóstrofo
-    [3, "Muy buen viaje, el niño's favorito"],
-  ])('guarda %s estrellas con el comentario «%s»', (estrellas, comentario) => {
+    [5, COMENTARIOS.vacio],
+    // Dato difícil: tildes, ñ y signos de exclamación
+    [3, COMENTARIOS.conTildesYEnie],
+    // Dato difícil: apóstrofo
+    [3, COMENTARIOS.conApostrofo],
+  ])('guarda %s estrellas con el comentario del caso %#', (estrellas, comentario) => {
     expect(validarCalificacion(estrellas, comentario)).toEqual({ valida: true, mensaje: '', comentario });
   });
 
@@ -39,7 +43,7 @@ describe('validarCalificacion (HU-09)', () => {
     // Partición inválida: sin elegir
     [undefined],
   ])('pide elegir entre 1 y 5 estrellas y no guarda nada con %s', (estrellas) => {
-    expect(validarCalificacion(estrellas, 'Buen servicio')).toEqual({
+    expect(validarCalificacion(estrellas, COMENTARIOS.normal)).toEqual({
       valida: false,
       mensaje: MENSAJE_ESTRELLAS,
       comentario: '',
