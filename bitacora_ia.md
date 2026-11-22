@@ -108,13 +108,49 @@ Asistente usado: Claude (chat)
 
 Esta semana no usé un agente que trabajara por su cuenta; todo el trabajo fue en el chat con el asistente y lo ejecuté yo en mi terminal.
 
+### Entrada 12
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** Le di al asistente las reglas de tres funciones, escritas a partir de mis historias HU-08, HU-09 y HU-03, y le pedí las tablas de casos con particiones de equivalencia, valores límite y una tabla de decisión para la función con varias condiciones. Propuso 15 filas para `validarPagoViaje`, 13 para `validarCalificacion` y 12 con la tabla de decisión para `evaluarBusqueda`.
+- **Decisión:** Aceptada
+- **Por qué:** Las tablas cubren todas las particiones, incluidas las inválidas, y cada borde. Revisé con las cinco preguntas que los esperados salen de las reglas del cliente. Tres esperados son decisiones del asistente que registré como supuestos (`NaN` e `Infinity` lanzan Error, el tiempo negativo lanza Error y el motivo vacío cuenta como «sin motivo»), y anoté la ambigüedad del minuto 10 («supera» en la historia contra «se cumple» en el escenario).
+- **Verificación:** Comparé cada fila con la regla escrita y las anoté en la sección 1 de `registro_pruebas.md`; después las pruebas con errores a propósito comprobaron que los bordes importan.
+- **Commit relacionado:** «Suite de pruebas de la semana 7: tablas de casos con it.each para las tres funciones»
+
+### Entrada 13
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** El asistente escribió las pruebas con `it.each`, un comentario por fila y valores exactos: 11 para `evaluarBusqueda`, 14 para `validarCalificacion` y 4 para casos de pago.
+- **Decisión:** Aceptada con cambios
+- **Por qué:** Al compararlas con mi `validar-pago.spec.ts` de la semana 5, dos filas eran redundantes (saldo 14799 y saldo 0) y las descarté. Además, la tabla tenía la fila «un peso más» (saldo 14801) que no tenía ninguna prueba, y la agregué. Ninguna prueba se modificó para que pasara.
+- **Verificación:** `npm run test:unit` pasa las 47 pruebas. Cambié tres veces el código a propósito (`<` por `<=` en el minuto 10, `>` por `>=` en 5 estrellas y `>=` por `>` en el saldo igual al estimado) y cada vez fallaron pruebas (3, 3 y 1). Deshice cada cambio con `git restore`.
+- **Commit relacionado:** «Suite de pruebas de la semana 7: tablas de casos con it.each para las tres funciones»
+
+### Entrada 14
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** Le pedí al asistente datos de prueba sintéticos, con contexto local, sin personas reales y con casos difíciles. Generó `datos-prueba.ts` con comentarios y motivos de demora inventados (Parque Santander, barrio Las Palmas), con tildes, ñ, apóstrofo y texto vacío.
+- **Decisión:** Aceptada
+- **Por qué:** Las funciones no reciben nombres ni teléfonos, así que solo se generaron los datos que se usan de verdad. Los textos son inventados y no hay datos reales míos ni de mi familia.
+- **Verificación:** Los dos specs usan el archivo como fixture y `npm run lint` y `npm run test:unit` siguen en verde. Sus orígenes y casos difíciles quedaron en la sección 4 de `registro_pruebas.md`.
+- **Commit relacionado:** «Datos sintéticos en un archivo de pruebas (tildes, ñ, apóstrofo y texto vacío)»
+
+### Entrada 15
+
+- **Fecha:** 2026-11-22
+- **Prompt o sugerencia:** El asistente propuso poner la carpeta `tests` en la raíz del proyecto y agregar `"tests/**/*.spec.ts"` a `angular.json` y `tsconfig.spec.json`.
+- **Decisión:** Rechazada
+- **Por qué:** Después del cambio `npm run test:unit` siguió ejecutando solo las 17 pruebas de antes: Angular no leía la carpeta. Deshice los cambios de configuración con `git restore` y moví la carpeta a `src/tests`, donde Angular ya busca las pruebas. También corregí los imports de `../src/app/...` a `../app/...`.
+- **Verificación:** `npm run test:unit` mostró 7 archivos y las pruebas nuevas ejecutándose. El asistente también se equivocó al contar: dijo que serían 47 pruebas y fueron 48; lo comprobé en la salida.
+- **Commit relacionado:** «Suite de pruebas de la semana 7: tablas de casos con it.each para las tres funciones»
+
 ## Resumen
 
 | Decisión | Cantidad |
 |---|---|
-| Aceptadas | 5 |
-| Aceptadas con cambios | 4 |
-| Rechazadas | 2 |
+| Aceptadas | 7 |
+| Aceptadas con cambios | 5 |
+| Rechazadas | 3 |
 
 ## Errores que atraparon las pruebas
 
@@ -124,8 +160,14 @@ La implementación que dio el asistente pasó las 11 pruebas a la primera, así 
 
 Las 6 pruebas nuevas sobre entradas inesperadas dieron 3 fallidas y 14 pasando antes de corregir el código, así que la implementación aceptada en la semana 5 tenía huecos que las 9 pruebas originales no cubrían. Después de la corrección pasaron las 17. La revisión con IA se equivocó una vez (falso positivo de `toLocaleString`) y no vio lo que estaba fuera de los dos archivos pegados (`.env`, dependencias y estilo), que encontré con `findstr`, `npm audit` y el linter.
 
+## Semana 7: pruebas contra errores a propósito
+
+Con la suite de la semana 7 introduje tres errores de un solo carácter y cada uno hizo fallar pruebas: el umbral del minuto 10 (3 fallos), el máximo de 5 estrellas (3 fallos) y el saldo igual al estimado (1 fallo, de una prueba de la semana 5). Las pruebas nuevas de `validar-pago-casos.spec.ts` no detectaron el tercer error porque prueban el saldo insuficiente, no el borde. La revisión de la suite generada por el asistente encontró dos pruebas redundantes y una fila de la tabla sin prueba.
+
 ## Reflexión final
 
 El asistente me ayudó más en armar el contrato, las 9 pruebas y la implementación de una vez, y en corregir mis errores de Git. Su principal fallo fue darme pruebas para Jasmine cuando mi proyecto usa Vitest: lo noté por los errores del editor y lo corregí antes del commit en rojo. Mis pruebas no atraparon un error en el código generado, pero la prueba del saldo igual al estimado sí detectó el cambio de `>=` a `>`, que es el error típico de un caso límite. La próxima vez revisaría el marco de pruebas del proyecto antes de pedir las pruebas y pediría la implementación en pasos más pequeños. También probaría cada rama del código con un cambio intencional para ver que alguna prueba falle.
 
 Al final de la semana 6 aprendí que la IA revisa bien lo que se le pega, pero no el repositorio completo, y que su revisión hay que clasificarla hallazgo por hallazgo. También aprendí que lo que funciona en mi carpeta puede fallar en un clon limpio, como pasó con los saltos de línea y el número de vulnerabilidades.
+
+En la semana 7 aprendí que una suite que pasa a la primera no demuestra nada hasta que se rompe el código a propósito, y que conviene comparar las pruebas que genera la IA con las que ya tengo para no duplicarlas. También vi que la IA puede equivocarse al contar o al configurar la herramienta, así que verifico en mi terminal.
