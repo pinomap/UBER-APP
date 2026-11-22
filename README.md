@@ -1,8 +1,8 @@
-﻿# Uber App
+# Uber App
 
 ## 1. Qué es
 
-App de transporte tipo Uber hecha con Ionic y Angular, como proyecto del seminario de Inteligencia Artificial Aplicada al Ciclo de Vida del Software. Esta primera versión incluye una funcionalidad: validar el pago de un viaje antes de confirmarlo (HU-08).
+App de transporte tipo Uber hecha con Ionic y Angular, como proyecto del seminario de Inteligencia Artificial Aplicada al Ciclo de Vida del Software. Por ahora incluye tres funciones con reglas de negocio, cada una con su suite de pruebas: validar el pago de un viaje antes de confirmarlo (HU-08), validar la calificación al conductor (HU-09) y decidir qué hacer cuando la búsqueda de conductor supera los 10 minutos (HU-03).
 
 ### Funcionalidad de la semana 5
 
@@ -85,7 +85,7 @@ La app se abre en `http://localhost:4200`.
 ## 5. Pruebas
 
 ```bash
-npm run test:unit   # pruebas unitarias con Vitest (17 pruebas)
+npm run test:unit   # pruebas unitarias con Vitest (47 pruebas)
 npm run lint        # ESLint con reglas de seguridad y Prettier
 ```
 
@@ -93,21 +93,30 @@ npm run lint        # ESLint con reglas de seguridad y Prettier
 
 ```
 .
-├── src/app/core/pago/
-│   ├── validar-pago.ts                 # función validarPagoViaje (HU-08)
-│   ├── validar-pago.spec.ts            # 9 pruebas del contrato
-│   └── validar-pago-entradas.spec.ts   # 6 pruebas de entradas inesperadas
-├── src/app/home/                       # pantalla de ejemplo de Ionic
-├── eslint.config.js                    # configuración del linter
-├── .env.example                        # variables de entorno (aún sin uso)
-├── bitacora_ia.md                      # registro del uso de IA
-├── revision_seguridad.md               # informe de revisión de código y seguridad
+├── src/app/core/
+│   ├── pago/
+│   │   ├── validar-pago.ts                 # validarPagoViaje (HU-08)
+│   │   ├── validar-pago.spec.ts            # 9 pruebas del contrato
+│   │   └── validar-pago-entradas.spec.ts   # 6 pruebas de entradas inesperadas
+│   ├── calificacion/validar-calificacion.ts  # validarCalificacion (HU-09)
+│   └── busqueda/evaluar-busqueda.ts          # evaluarBusqueda (HU-03, varias condiciones)
+├── src/tests/                              # pruebas de la semana 7 (it.each)
+│   ├── validar-calificacion.spec.ts
+│   ├── evaluar-busqueda.spec.ts
+│   ├── validar-pago-casos.spec.ts
+│   └── datos-prueba.ts                     # datos sintéticos (sin personas reales)
+├── src/app/home/                               # pantalla de ejemplo de Ionic
+├── registro_pruebas.md                     # tablas de casos, revisión de la IA y errores a propósito
+├── eslint.config.js                        # configuración del linter
+├── .env.example                            # variables de entorno (aún sin uso)
+├── bitacora_ia.md                          # registro del uso de IA
+├── revision_seguridad.md                   # informe de revisión de código y seguridad
 └── README.md
 ```
 
 ## 7. Uso de IA
 
-Usé Claude (chat) como asistente: propuso la función y el contrato, escribió las pruebas, la implementación, el refactor y una revisión de código y seguridad. Cada sugerencia se verificó con pruebas, el linter o `npm audit`, y se registró en [`bitacora_ia.md`](bitacora_ia.md). Los hallazgos de la revisión están en [`revision_seguridad.md`](revision_seguridad.md). Las decisiones y la verificación son mías.
+Usé Claude (chat) como asistente: propuso la función y el contrato, escribió las pruebas, la implementación, el refactor, una revisión de código y seguridad, y en la semana 7 las tablas de casos, las pruebas y los datos sintéticos. Cada sugerencia se verificó con pruebas, el linter o `npm audit`, y se registró en [`bitacora_ia.md`](bitacora_ia.md). Los hallazgos de la revisión están en [`revision_seguridad.md`](revision_seguridad.md) y la revisión de las pruebas de la IA en [`registro_pruebas.md`](registro_pruebas.md). Las decisiones y la verificación son mías.
 
 ## 8. Autor y licencia
 
