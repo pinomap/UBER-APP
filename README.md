@@ -86,6 +86,7 @@ La app se abre en `http://localhost:4200`.
 
 ```bash
 npm run test:unit   # pruebas unitarias con Vitest (47 pruebas)
+npm run test:unit -- --coverage   # cobertura de las pruebas (v8)
 npm run lint        # ESLint con reglas de seguridad y Prettier
 ```
 
@@ -106,6 +107,9 @@ npm run lint        # ESLint con reglas de seguridad y Prettier
 │   ├── validar-pago-casos.spec.ts
 │   └── datos-prueba.ts                     # datos sintéticos (sin personas reales)
 ├── src/app/home/                               # pantalla de ejemplo de Ionic
+├── docs/                                   # propuesta, requisitos y diseño con ADR (módulos 1 a 3)
+├── .github/workflows/ci.yml                # pipeline: lint, pruebas y auditoría
+├── informe_final.pdf                       # informe final del proyecto integrador
 ├── registro_pruebas.md                     # tablas de casos, revisión de la IA y errores a propósito
 ├── eslint.config.js                        # configuración del linter
 ├── .env.example                            # variables de entorno (aún sin uso)
@@ -116,7 +120,7 @@ npm run lint        # ESLint con reglas de seguridad y Prettier
 
 ## 7. Uso de IA
 
-Usé Claude (chat) como asistente: propuso la función y el contrato, escribió las pruebas, la implementación, el refactor, una revisión de código y seguridad, y en la semana 7 las tablas de casos, las pruebas y los datos sintéticos. Cada sugerencia se verificó con pruebas, el linter o `npm audit`, y se registró en [`bitacora_ia.md`](bitacora_ia.md). Los hallazgos de la revisión están en [`revision_seguridad.md`](revision_seguridad.md) y la revisión de las pruebas de la IA en [`registro_pruebas.md`](registro_pruebas.md). Las decisiones y la verificación son mías.
+Usé Claude (chat) como asistente: propuso la función y el contrato, escribió las pruebas, la implementación, el refactor, una revisión de código y seguridad, en la semana 7 las tablas de casos, las pruebas y los datos sintéticos, y en la semana 10 el pipeline y el borrador del informe final. Cada sugerencia se verificó con pruebas, el linter o `npm audit`, y se registró en [`bitacora_ia.md`](bitacora_ia.md). Los hallazgos de la revisión están en [`revision_seguridad.md`](revision_seguridad.md) y la revisión de las pruebas de la IA en [`registro_pruebas.md`](registro_pruebas.md). Las decisiones y la verificación son mías.
 
 ## 8. Autor y licencia
 

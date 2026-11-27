@@ -144,12 +144,30 @@ Esta semana no usé un agente que trabajara por su cuenta; todo el trabajo fue e
 - **Verificación:** `npm run test:unit` mostró 7 archivos y las pruebas nuevas ejecutándose. El asistente también se equivocó al contar: dijo que serían 47 pruebas y fueron 48; lo comprobé en la salida.
 - **Commit relacionado:** «Suite de pruebas de la semana 7: tablas de casos con it.each para las tres funciones»
 
+### Entrada 16
+
+- **Fecha:** 2026-11-26
+- **Prompt o sugerencia:** Le pedí al asistente un pipeline de integración continua para el repositorio. Propuso un `ci.yml` con Node 22, `npm ci`, `npm run lint`, `npm run test:unit` y `npm audit --omit=dev --audit-level=high`, con permisos mínimos (`contents: read`) y ejecución en push y pull request sobre la rama `master`.
+- **Decisión:** Aceptada
+- **Por qué:** Usa la rama real del repositorio (`master`, no `main`), no oculta fallos con `continue-on-error` y reutiliza los mismos comandos que ya pasaban en mi equipo y en una carpeta limpia.
+- **Verificación:** La ejecución en GitHub Actions salió en verde ([ejecución](https://github.com/pinomap/UBER-APP/actions/runs/45944455548)). Después agregué la cobertura con `@vitest/coverage-v8` y salió 100 % en las tres funciones de negocio. Todavía no probé que el pipeline salga en rojo cuando una prueba falla.
+- **Commit relacionado:** «Pipeline de integración continua: lint, pruebas y auditoría»
+
+### Entrada 17
+
+- **Fecha:** 2026-11-27
+- **Prompt o sugerencia:** Le di al asistente la plantilla del informe final y las evidencias del repositorio (bitácora, registro de pruebas, informe de seguridad, documentos de los módulos 1 a 3) y le pedí un borrador del informe y de las diapositivas.
+- **Decisión:** Aceptada con cambios
+- **Por qué:** El borrador usa solo hechos con evidencia y deja marcados los pendientes (backend, operación completa). Dos pasajes los escribió el asistente en mi nombre (el motivo de los pendientes y lo que haría distinto) y los reescribí con mis palabras.
+- **Verificación:** Comprobé cada enlace y cada commit citado contra el repositorio y revisé que los números (47 pruebas, 100 % de cobertura, 9 vulnerabilidades solo de desarrollo) coincidan con la última ejecución.
+- **Commit relacionado:** «Informe final del proyecto integrador en PDF»
+
 ## Resumen
 
 | Decisión | Cantidad |
 |---|---|
-| Aceptadas | 7 |
-| Aceptadas con cambios | 5 |
+| Aceptadas | 8 |
+| Aceptadas con cambios | 6 |
 | Rechazadas | 3 |
 
 ## Errores que atraparon las pruebas
